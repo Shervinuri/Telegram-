@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>External Redirect Page</title>
+    
+    <!-- Load Tailwind CSS for simple, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Setting a clean default font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main Card Displaying Message -->
+    <div class="max-w-md w-full p-8 bg-gray-800 rounded-xl shadow-2xl text-center space-y-6">
+        
+        <div class="text-3xl font-bold text-green-400 animate-pulse">
+            Redirecting to External Browser...
+        </div>
+        
+        <p class="text-gray-300">
+            We are executing a forced mechanism to open this link in your device's standard browser.
+        </p>
+        
+        <p class="text-sm text-gray-400">
+            If the automatic transfer is not successful, please click the button below.
+        </p>
+
+        <!-- Fallback Link -->
+        <a 
+            id="redirect-link"
+            href="https://Googleaistudio.short.gy/Ari&Sarii" 
+            class="inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300 shadow-md transform hover:scale-105"
+        >
+            Click Here to Proceed
+        </a>
+
+        <div class="text-sm text-gray-500 pt-4">
+            Target URL: https://Googleaistudio.short.gy/Ari&Sarii
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const targetUrl = "https://Googleaistudio.short.gy/Ari&Sarii";
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            let redirectUrl = targetUrl; // Default: standard HTTPS address
+            
+            // --- Deep Link Logic to Force Exit from WebView ---
+            
+            // 1. Android Strategy: Use Intent URI
+            if (/android/i.test(userAgent)) {
+                // This Intent URI instructs the Android OS to open the link in an external browser.
+                // We keep 'package=com.android.chrome' as it has the highest chance of breaking the WebView limits.
+                const encodedFallbackUrl = encodeURIComponent(targetUrl);
+                const path = targetUrl.replace('https://', '').replace('http://', '');
+                
+                // Intent URI: Attempts Chrome, with a fallback to the original target URL
+                redirectUrl = `intent://${path}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodedFallbackUrl};end`;
+                
+                console.log("Android detected. Attempting Intent URI to exit WebView.");
+            } 
+            
+            // 2. iOS Strategy: Use Chrome/Safari Deep Link Scheme
+            else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // The googlechrome:// protocol is effective for breaking out of WebViews on iOS.
+                const path = targetUrl.replace('https://', '').replace('http://', '');
+                redirectUrl = `googlechrome://${path}`; 
+                
+                console.log("iOS detected. Attempting chrome deep link to exit WebView.");
+            }
+
+            // --- Execute Redirection ---
+            
+            // Immediately replace the current location
+            window.location.replace(redirectUrl);
+            
+            // Final Fallback to ensure the user reaches the destination
+            setTimeout(() => {
+                if (window.location.href !== targetUrl) {
+                    console.log("Deep link failed. Final fallback to standard HTTPS.");
+                    window.location.replace(targetUrl);
+                }
+            }, 1000); // Wait 1 second
+        });
+    </script>
+
+</body>
+</html>
+
